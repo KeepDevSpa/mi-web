@@ -1,0 +1,22 @@
+// Schema para la migración de UnifiedHeroConfig
+
+model UnifiedHeroConfig {
+  id              String   @id @default(cuid())
+  page            String   @unique
+  title           String
+  highlightedText String?
+  description     String?
+  image           String?
+  variant         String   @default("default")
+  primaryCta      Json?
+  secondaryCta    Json?
+  highlights      Json?
+  showButtons     Boolean  @default(true)
+  contentPosition String   @default("left")
+  titleLayout     String   @default("stacked")
+  overlayOpacity  Float    @default(0.4)
+  textSize        String   @default("medium")
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

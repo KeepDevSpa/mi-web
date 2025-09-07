@@ -1,0 +1,305 @@
+/* Estilos Vodafone-inspired para la página de empresa */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* Variables CSS para consistencia */
+:root {
+  --green-primary: #16a34a;
+  --green-secondary: #15803d;
+  --green-light: #22c55e;
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-600: #475569;
+  --slate-400: #94a3b8;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --white: #ffffff;
+  
+  /* Colores para navegación moderna */
+  --blue-gradient: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  --green-gradient: linear-gradient(135deg, #10b981, #059669);
+  --purple-gradient: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  --red-gradient: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+/* Reset y base */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tipografía Vodafone-style */
+.font-black {
+  font-weight: 900;
+}
+
+/* Navegación moderna de servicios */
+.service-nav-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.service-nav-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.service-nav-button:hover::before {
+  left: 100%;
+}
+
+.service-nav-button.active {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.service-nav-button:not(.active):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Etiquetas de categoría en las tarjetas */
+.category-badge {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: pulse-glow 2s ease-in-out infinite alternate;
+}
+
+.category-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.8s;
+}
+
+.category-badge:hover::before {
+  left: 100%;
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+  100% {
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Animaciones y transiciones suaves */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.fade-in-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-child {
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* Efectos hover estilo Vodafone */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Botones estilo Vodafone */
+.btn-primary {
+  background: linear-gradient(135deg, var(--green-primary), var(--green-secondary));
+  border: none;
+  color: var(--white);
+  font-weight: 700;
+  padding: 16px 32px;
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 10px 25px rgba(22, 163, 74, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(22, 163, 74, 0.4);
+  background: linear-gradient(135deg, var(--green-secondary), var(--green-primary));
+}
+
+.btn-secondary {
+  background: var(--white);
+  border: 2px solid var(--slate-200);
+  color: var(--slate-800);
+  font-weight: 700;
+  padding: 14px 30px;
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.btn-secondary:hover {
+  border-color: var(--slate-400);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Cards estilo Vodafone */
+.card-modern {
+  background: var(--white);
+  border: 1px solid var(--slate-100);
+  border-radius: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  overflow: hidden;
+}
+
+.card-modern:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border-color: var(--green-primary);
+}
+
+/* Gradientes Vodafone-style */
+.gradient-hero {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.gradient-green {
+  background: linear-gradient(135deg, var(--green-primary) 0%, var(--green-secondary) 100%);
+}
+
+.gradient-section {
+  background: linear-gradient(135deg, var(--slate-100) 0%, var(--white) 100%);
+}
+
+/* Pills/Tags estilo Vodafone */
+.pill {
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.pill-primary {
+  background: var(--green-primary);
+  color: var(--white);
+}
+
+.pill-secondary {
+  background: var(--slate-100);
+  color: var(--slate-800);
+  border: 1px solid var(--slate-200);
+}
+
+.pill-secondary:hover {
+  background: var(--slate-200);
+  border-color: var(--slate-400);
+}
+
+/* Iconos y elementos visuales */
+.icon-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--green-primary);
+  color: var(--white);
+  font-size: 24px;
+  margin-bottom: 24px;
+}
+
+/* Efectos de glassmorphism actualizados */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Patterns y texturas sutiles */
+.pattern-dots {
+  background-image: radial-gradient(circle at 2px 2px, rgba(0,0,0,0.05) 1px, transparent 0);
+  background-size: 32px 32px;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .fade-in-section {
+    transform: translateY(20px);
+  }
+  
+  .card-modern {
+    border-radius: 16px;
+  }
+  
+  .btn-primary, .btn-secondary {
+    padding: 12px 24px;
+    border-radius: 12px;
+  }
+}
+
+/* Chart container estilo Vodafone */
+.chart-container {
+  background: var(--white);
+  border-radius: 24px;
+  border: 1px solid var(--slate-100);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+/* Micro-interactions */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Focus states mejorados para accesibilidad */
+button:focus,
+a:focus {
+  outline: 2px solid var(--green-primary);
+  outline-offset: 2px;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Partner logos hover effect */
+.partner-logo {
+  filter: grayscale(100%) opacity(0.6);
+  transition: all 0.3s ease;
+}
+
+.partner-logo:hover {
+  filter: grayscale(0%) opacity(1);
+  transform: scale(1.05);
+}

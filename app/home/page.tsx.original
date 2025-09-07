@@ -1,0 +1,225 @@
+import HeroRevolucionario from '@/components/ui/hero-revolucionario';
+import InstallationTimeline from '@/components/ui/installation-timeline';
+import VentajasDiferenciales from '@/components/ui/ventajas-diferenciales';
+import TestimoniosAvanzados from '@/components/ui/testimonios-avanzados';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import CoverageCheck from '@/components/coverage-check';
+
+export default function NuevaHomeOlin() {
+  return (
+    <div className="min-h-screen bg-white">
+      
+      {/* Hero Section Revolucionario */}
+      <HeroRevolucionario 
+        title="FIBRA GO + MÓVIL 60GB"
+        subtitle="La conexión que realmente necesitas"
+        originalPrice={45}
+        currentPrice={28}
+        discount={38}
+        timeLeft="Solo hasta el 15 de Septiembre"
+        benefits={[
+          "Fibra 600Mb simétrica",
+          "Router WiFi 6 incluido", 
+          "60GB con velocidad 5G",
+          "Llamadas ilimitadas"
+        ]}
+        ctaText="¡LO QUIERO!"
+        urgency={true}
+        backgroundImage="/Hero-Banner.webp"
+      />
+
+      {/* Coverage Check Form (se muestra cuando se clica el CTA) */}
+      <div id="coverage-form">
+        <CoverageCheck />
+      </div>
+
+      {/* Timeline de Instalación */}
+      <InstallationTimeline 
+        totalInstallations={1071}
+        averageDays={5}
+        showStats={true}
+      />
+
+      {/* Ventajas Diferenciales */}
+      <VentajasDiferenciales 
+        showStats={true}
+        animateOnScroll={true}
+      />
+
+      {/* Testimonios Avanzados */}
+      <TestimoniosAvanzados 
+        category="all"
+        showStats={true}
+        autoplay={true}
+      />
+
+      {/* Sección de Ofertas Adicionales */}
+      <section className="py-20 bg-gradient-to-br from-blue-600 to-purple-600 text-white">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          
+          <Badge className="bg-white/20 text-white px-6 py-3 text-base font-bold mb-8">
+            🎁 OFERTAS ESPECIALES
+          </Badge>
+          
+          <h2 className="text-4xl lg:text-6xl font-black mb-6">
+            ¿Necesitas algo más?
+          </h2>
+          
+          <p className="text-xl mb-12 max-w-3xl mx-auto opacity-90">
+            Descubre nuestras ofertas en fibra solo, móvil solo, soluciones para empresas y mucho más
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            {/* Solo Fibra */}
+            <div className="bg-white/10 backdrop-blur rounded-2xl p-6 text-center hover:bg-white/20 transition-all duration-300 cursor-pointer">
+              <div className="text-4xl mb-4">🏠</div>
+              <h3 className="text-xl font-bold mb-2">Solo Fibra</h3>
+              <p className="text-white/80 mb-4 text-sm">Desde 20€/mes</p>
+              <Button variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
+                Ver ofertas
+              </Button>
+            </div>
+
+            {/* Solo Móvil */}
+            <div className="bg-white/10 backdrop-blur rounded-2xl p-6 text-center hover:bg-white/20 transition-all duration-300 cursor-pointer">
+              <div className="text-4xl mb-4">📱</div>
+              <h3 className="text-xl font-bold mb-2">Solo Móvil</h3>
+              <p className="text-white/80 mb-4 text-sm">Desde 13€/mes</p>
+              <Button variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
+                Ver ofertas
+              </Button>
+            </div>
+
+            {/* Empresas */}
+            <div className="bg-white/10 backdrop-blur rounded-2xl p-6 text-center hover:bg-white/20 transition-all duration-300 cursor-pointer">
+              <div className="text-4xl mb-4">🏢</div>
+              <h3 className="text-xl font-bold mb-2">Empresas</h3>
+              <p className="text-white/80 mb-4 text-sm">Soluciones profesionales</p>
+              <Button variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
+                Consultar
+              </Button>
+            </div>
+
+            {/* Prisma TV */}
+            <div className="bg-white/10 backdrop-blur rounded-2xl p-6 text-center hover:bg-white/20 transition-all duration-300 cursor-pointer">
+              <div className="text-4xl mb-4">📺</div>
+              <h3 className="text-xl font-bold mb-2">Prisma TV</h3>
+              <p className="text-white/80 mb-4 text-sm">3 meses gratis</p>
+              <Button variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600">
+                Descubrir
+              </Button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Rápidas */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4">
+          
+          <div className="text-center mb-16">
+            <Badge className="bg-blue-100 text-blue-800 px-6 py-3 text-base font-bold mb-6">
+              ❓ DUDAS FRECUENTES
+            </Badge>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Las respuestas que buscas
+            </h2>
+            <p className="text-xl text-gray-600">
+              Resolvemos las dudas más comunes de forma sencilla y directa
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: "¿Cómo puedo contratar Prisma?",
+                a: "Muy fácil: rellena el formulario de cobertura, llámanos al 915691382 o visita una de nuestras tiendas. Un agente te ayudará con todo el proceso."
+              },
+              {
+                q: "¿Cuánto se tarda en tener fibra desde la contratación?",
+                a: "Menos de 5 días de media. Es el mejor tiempo del sector. Te contactamos en 24h para coordinar la instalación."
+              },
+              {
+                q: "¿Qué ventajas tengo al contratar fibra y móvil juntos?",
+                a: "Obtienes descuentos permanentes, una sola factura, soporte unificado y la tranquilidad de tener todo con una operadora seria."
+              },
+              {
+                q: "¿Hay permanencia o costes ocultos?",
+                a: "Cero permanencia y cero costes ocultos. Lo que ves es lo que pagas. Transparencia total, siempre."
+              },
+              {
+                q: "¿Qué pasa si no funciona bien?",
+                a: "Garantía de velocidad o devolución del dinero. Si no estás satisfecho, te ayudamos a solucionarlo o te devolvemos lo pagado."
+              }
+            ].map((faq, i) => (
+              <details key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 cursor-pointer hover:shadow-md transition-shadow">
+                <summary className="text-lg font-semibold text-gray-900 flex items-center justify-between">
+                  {faq.q}
+                  <span className="text-blue-600 ml-4">+</span>
+                </summary>
+                <p className="mt-4 text-gray-600 leading-relaxed">
+                  {faq.a}
+                </p>
+              </details>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8">
+              Ver todas las preguntas frecuentes
+            </Button>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Footer CTA */}
+      <section className="py-20 bg-gradient-to-r from-green-500 to-blue-500 text-white">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          
+          <h2 className="text-4xl lg:text-6xl font-black mb-6">
+            ¿Listo para la mejor conexión?
+          </h2>
+          
+          <p className="text-xl mb-12 opacity-90 max-w-2xl mx-auto">
+            Únete a los miles de clientes que ya disfrutan de fibra y móvil sin complicaciones
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 font-black py-4 px-8 text-lg">
+              Comprobar cobertura
+            </Button>
+            <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-blue-600 font-bold py-4 px-8">
+              Llamar al 915691382
+            </Button>
+          </div>
+
+          {/* Trust Indicators */}
+          <div className="flex flex-wrap items-center justify-center gap-8 text-sm opacity-80">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-white rounded-full"></span>
+              <span>Sin permanencia</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-white rounded-full"></span>
+              <span>Instalación gratuita</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-white rounded-full"></span>
+              <span>Soporte humano 24/7</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-white rounded-full"></span>
+              <span>+10.000 clientes satisfechos</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  );
+}

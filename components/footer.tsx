@@ -4,17 +4,19 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
-            <div className="text-2xl font-bold text-green-400 mb-4">Prisma</div>
+            <div className="mb-4">
+              <img src="/logo-prisma.svg" alt="Prisma" className="h-12 w-auto" />
+            </div>
             <div className="flex gap-4">
-              <a href="#" className="text-green-400 hover:text-green-300">
+              <a href="#" className="text-blue-400 hover:text-blue-300">
                 <span className="sr-only">Facebook</span>
                 Facebook
               </a>
-              <a href="#" className="text-green-400 hover:text-green-300">
+              <a href="#" className="text-blue-400 hover:text-blue-300">
                 <span className="sr-only">Instagram</span>
                 Instagram
               </a>
-              <a href="#" className="text-green-400 hover:text-green-300">
+              <a href="#" className="text-blue-400 hover:text-blue-300">
                 <span className="sr-only">LinkedIn</span>
                 LinkedIn
               </a>
@@ -90,17 +92,17 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">PrismaTV</h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                <a href="/olin-tv" className="hover:text-white">
+                <a href="/prisma-tv" className="hover:text-white">
                   Canales Premium
                 </a>
               </li>
               <li>
-                <a href="/olin-tv" className="hover:text-white">
+                <a href="/prisma-tv" className="hover:text-white">
                   Deportes
                 </a>
               </li>
               <li>
-                <a href="/olin-tv" className="hover:text-white">
+                <a href="/prisma-tv" className="hover:text-white">
                   Entretenimiento
                 </a>
               </li>
@@ -108,21 +110,21 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold mb-4">Alarmas</h3>
+            <h3 className="text-lg font-semibold mb-4">Seguridad</h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                <a href="/alarmas" className="hover:text-white">
-                  Prisma Protect
+                <a href="/seguridad" className="hover:text-white">
+                  Seguridad Física
                 </a>
               </li>
               <li>
-                <a href="/alarmas" className="hover:text-white">
-                  Hogar Tranquilidad
+                <a href="/seguridad" className="hover:text-white">
+                  Ciberseguridad
                 </a>
               </li>
               <li>
-                <a href="/alarmas" className="hover:text-white">
-                  Hogar Tranquilidad+
+                <a href="/seguridad" className="hover:text-white">
+                  Control Parental
                 </a>
               </li>
             </ul>

@@ -1,0 +1,265 @@
+import { Button } from "@/components/ui/button"
+import * as React from "react"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import Header from "@/components/header"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import CoverageCheck from "@/components/coverage-check"
+import { Search, Phone, HelpCircle } from "lucide-react"
+import Footer from "@/components/footer"
+import TopContactBar from "@/components/top-contact-bar"
+import { prisma } from "@/lib/prisma"
+import Image from 'next/image'
+
+export default async function FAQPage() {
+  // Obtenemos FAQs dinámicas de la base de datos
+  const dynamicFAQs = await prisma.fAQItem.findMany({
+    orderBy: { id: 'asc' },
+  });
+
+  const faqCategories = [
+    {
+      title: "Fibra",
+      questions: [
+        {
+          question: "¿Qué velocidad máxima puedo contratar?",
+          answer: "Ofrecemos velocidades de hasta 1000 Mbps simétricos, lo que significa la misma velocidad de subida y bajada. La velocidad disponible dependerá de la cobertura en tu zona."
+        },
+        {
+          question: "¿La instalación tiene algún coste?",
+          answer: "No, la instalación es completamente gratuita por parte de nuestros técnicos certificados. Nos encargamos de todo el proceso."
+        },
+        {
+          question: "¿Cuánto tarda en instalarse la fibra?",
+          answer: "Normalmente la instalación se realiza en menos de 48 horas laborables desde la confirmación de la cobertura."
+        }
+      ]
+    },
+    {
+      title: "Móvil",
+      questions: [
+        {
+          question: "¿Los datos ilimitados tienen alguna restricción?",
+          answer: "No, cuando decimos ilimitados es sin letra pequeña. Puedes navegar todo lo que quieras sin restricciones de velocidad."
+        },
+        {
+          question: "¿Puedo conservar mi número actual?",
+          answer: "Sí, el proceso de portabilidad es gratuito y nos encargamos de todas las gestiones. Tu número se mantiene."
+        },
+        {
+          question: "¿Qué cobertura utilizan las líneas móviles?",
+          answer: "Trabajamos con las principales redes del país para garantizar la mejor cobertura 5G/4G+ en todo momento."
+        }
+      ]
+    },
+    {
+      title: "Contratos y pagos",
+      questions: [
+        {
+          question: "¿Hay permanencia en los servicios?",
+          answer: "No, nuestros servicios son sin permanencia. Queremos que te quedes por la calidad, no por obligación."
+        },
+        {
+          question: "¿Cómo se realiza la facturación?",
+          answer: "La facturación es mensual y puedes elegir el método de pago que prefieras: domiciliación bancaria o tarjeta."
+        },
+        {
+          question: "¿Puedo modificar mi tarifa?",
+          answer: "Sí, puedes cambiar tu tarifa en cualquier momento sin penalizaciones a través del área de cliente o contactando con atención al cliente."
+        }
+      ]
+    },
+    {
+      title: "Atención al cliente",
+      questions: [
+        {
+          question: "¿Cómo puedo contactar con atención al cliente?",
+          answer: "Disponemos de múltiples canales de atención: teléfono 24/7, chat en vivo, WhatsApp y email. Siempre hay alguien disponible para ayudarte."
+        },
+        {
+          question: "¿Qué pasa si tengo una incidencia técnica?",
+          answer: "Nuestro servicio técnico está disponible 24/7. Ante cualquier incidencia, la respuesta es inmediata y si es necesario, enviamos un técnico en menos de 24h."
+        }
+      ]
+    }
+  ];
+
+  return (
+    <div className="bg-white">
+      <TopContactBar />
+      <Header />
+      
+      {/* Hero Section */}
+      <section className="relative py-20 bg-gradient-to-r from-green-900 to-green-700">
+        <div className="absolute inset-0 bg-black/20" />
+        <div className="relative container mx-auto px-4">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Centro de Ayuda
+            </h1>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto mb-8">
+              Encuentra respuestas a todas tus dudas sobre nuestros servicios.
+            </p>
+            
+            {/* Search Bar */}
+            <div className="max-w-2xl mx-auto">
+              <div className="flex gap-4">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Input 
+                    type="text" 
+                    placeholder="Busca tu pregunta aquí..." 
+                    className="w-full pl-12 py-6 text-lg bg-white border-2 border-transparent focus:border-green-500 rounded-xl" 
+                  />
+                </div>
+                <Button className="px-8 py-6 text-lg bg-green-500 hover:bg-green-600 text-white rounded-xl">
+                  Buscar
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Categories */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <HelpCircle className="h-5 w-5 text-green-600" />
+                  <span>Fibra</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  Resuelve tus dudas sobre instalación, velocidades y cobertura de fibra.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Phone className="h-5 w-5 text-green-600" />
+                  <span>Móvil</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  Información sobre tarifas móviles, portabilidad y cobertura.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <HelpCircle className="h-5 w-5 text-green-600" />
+                  <span>Contratos</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  Todo sobre permanencia, facturación y modificación de servicios.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Phone className="h-5 w-5 text-green-600" />
+                  <span>Soporte</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-600">
+                  Contacto con atención al cliente y resolución de incidencias.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* FAQs por categoría */}
+          {faqCategories.map((category, index) => (
+            <div key={index} className="mb-16">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <span className="w-1 h-8 bg-green-500 rounded-full"></span>
+                {category.title}
+              </h2>
+              <Accordion type="single" collapsible className="w-full">
+                {category.questions.map((faq, faqIndex) => (
+                  <AccordionItem key={faqIndex} value={`${index}-${faqIndex}`}>
+                    <AccordionTrigger className="text-left">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          ))}
+
+          {/* FAQs Dinámicas */}
+          {dynamicFAQs.length > 0 && (
+            <div className="mb-16">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <span className="w-1 h-8 bg-green-500 rounded-full"></span>
+                Otras preguntas frecuentes
+              </h2>
+              <Accordion type="single" collapsible className="w-full">
+                {dynamicFAQs.map((faq) => (
+                  <AccordionItem key={faq.id} value={faq.id}>
+                    <AccordionTrigger className="text-left">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold mb-4">
+              ¿No encuentras lo que buscas?
+            </h2>
+            <p className="text-gray-600 mb-8">
+              Nuestro equipo de atención al cliente está disponible 24/7 para resolver todas tus dudas.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button className="px-8 py-6 bg-green-500 hover:bg-green-600 text-white text-lg">
+                Contactar ahora
+              </Button>
+              <Button variant="outline" className="px-8 py-6 text-lg">
+                Ver guías de ayuda
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Coverage Check */}
+      <CoverageCheck />
+      
+      <Footer />
+    </div>
+  )
+}

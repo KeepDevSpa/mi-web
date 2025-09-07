@@ -1,0 +1,377 @@
+'use client';
+
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { IconMap, CORPORATE_COLOR_CLASSES, getThemedIcon } from '@/lib/icon-config';
+import { PriceDisplay } from './price-display';
+
+interface Speed {
+  id: string;
+  label: string;
+  price: number;
+  originalPrice?: number;
+}
+
+interface Extra {
+  id: string;
+  label: string;
+  price: number;
+  description?: string;
+}
+
+interface PricingCardProps {
+  variant?: 
+    | 'blue' 
+    | 'lightgreen' 
+    | 'golden' 
+    | 'dark' 
+    | 'purple' 
+    | 'light' 
+    | 'premium'
+    | 'vodafone'
+    | 'orange'
+    | 'movistar';
+  planName: string;
+  subtitle?: string;
+  price: number | null | undefined;
+  originalPrice?: number | null;
+  hasSpeedSelector?: boolean;
+  speeds?: Speed[];
+  features: string[];
+  extras?: Extra[];
+  isPopular?: boolean;
+  ctaText?: string;
+  ctaLink?: string;
+  isModal?: boolean;
+  page?: string;
+  hasOperatorChoice?: boolean;
+  operator?: string | null;
+  isVIP?: boolean;
+  isPremium?: boolean;
+  hasCoverageSelector?: boolean;
+  coverages?: any[];
+  hasDataSelector?: boolean;
+  dataOptions?: any[];
+}
+
+const headerGradients = {
+  blue: 'bg-gradient-to-b from-blue-500 to-blue-600',
+  lightgreen: 'bg-gradient-to-b from-emerald-500 to-emerald-600',
+  golden: 'bg-gradient-to-b from-amber-500 to-amber-600',
+  dark: 'bg-gradient-to-b from-gray-800 to-gray-900',
+  purple: 'bg-gradient-to-b from-purple-500 to-purple-600',
+  light: 'bg-gray-100',
+  premium: 'bg-gradient-to-b from-indigo-900 to-indigo-800',
+  vodafone: 'bg-gradient-to-b from-red-600 to-red-700',
+  orange: 'bg-gradient-to-b from-orange-500 to-orange-600',
+  movistar: 'bg-gradient-to-b from-blue-600 to-blue-700',
+};
+
+const textColors = {
+  light: 'text-gray-800',
+  default: 'text-white',
+};
+
+const speedLabelColors = {
+  default: 'bg-indigo-600 text-white',
+  movistar: 'bg-blue-600 text-white',
+  orange: 'bg-orange-600 text-white',
+  vodafone: 'bg-red-600 text-white',
+  vip: 'bg-purple-600 text-white',
+};
+
+const operatorLabels = {
+  default: null,
+  vodafone: (
+    <div className="flex items-center mt-2">
+      <div className="h-5 w-5 rounded-full bg-red-600 mr-2"></div>
+      <div className="text-xl font-bold">Vodafone</div>
+    </div>
+  ),
+  orange: (
+    <div className="flex items-center mt-2">
+      <div className="h-5 w-5 rounded-full bg-orange-600 mr-2"></div>
+      <div className="text-xl font-bold">Orange</div>
+    </div>
+  ),
+  movistar: (
+    <div className="flex items-center mt-2">
+      <div className="h-5 w-5 rounded-full bg-blue-700 mr-2"></div>
+      <div className="text-xl font-bold">Movistar</div>
+    </div>
+  ),
+};
+
+export default function PricingCard({
+  variant = 'blue',
+  planName,
+  subtitle,
+  price,
+  originalPrice = null,
+  hasSpeedSelector = false,
+  speeds = [],
+  features = [],
+  extras = [],
+  isPopular = false,
+  ctaText = 'Contratar ahora',
+  ctaLink = '/contacto',
+  isModal = false,
+  page,
+  hasOperatorChoice = false,
+  operator = null,
+  isVIP = false,
+  isPremium = false,
+  hasCoverageSelector = false,
+  coverages = [],
+}: PricingCardProps) {
+  const [selectedSpeed, setSelectedSpeed] = useState(speeds[0]);
+  const [isExtrasOpen, setIsExtrasOpen] = useState(false);
+  const [selectedExtras, setSelectedExtras] = useState<Set<string>>(new Set());
+  const [selectedOperator, setSelectedOperator] = useState<string | null>(operator);
+  
+  // Si hay selector de velocidad, usa el precio de la velocidad seleccionada
+  // Si no, usa el precio base proporcionado
+  const basePrice = hasSpeedSelector ? (selectedSpeed?.price || price || 0) : (price || 0);
+  const displayOriginalPrice = hasSpeedSelector ? selectedSpeed?.originalPrice : originalPrice;
+  
+  // Calcular el precio total sumando los extras seleccionados
+  const displayPrice = basePrice + extras
+    .filter(extra => selectedExtras.has(extra.id))
+    .reduce((sum, extra) => sum + extra.price, 0);
+  
+  // Determinar la variante a mostrar según el operador seleccionado
+  const activeVariant = selectedOperator || variant;
+
+  const [selectedCoverage, setSelectedCoverage] = useState<string | null>(null);
+
+  return (
+    <div className="flex flex-col space-y-4">
+      {/* Selector de Cobertura FUERA de la tarjeta */}
+      {hasCoverageSelector && coverages && coverages.length > 0 && (
+        <div>
+          <div className="mb-1 pl-1 text-sm text-gray-600 font-medium">
+            Cobertura
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { id: 'movistar', name: 'Movistar', color: 'bg-blue-500 hover:bg-blue-600' },
+              { id: 'orange', name: 'Orange', color: 'bg-orange-500 hover:bg-orange-600' },
+              { id: 'vodafone', name: 'Vodafone', color: 'bg-red-500 hover:bg-red-600' }
+            ].map((op) => (
+              <button
+                key={op.id}
+                onClick={() => {
+                  setSelectedCoverage(op.id);
+                  setSelectedOperator(op.id);
+                }}
+                className={`py-3 px-2 rounded transition-all text-white text-center ${op.color} ${
+                  selectedCoverage === op.id ? 'ring-2 ring-offset-2 ring-gray-400' : ''
+                }`}
+              >
+                {op.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+      
+      {/* Tarjeta principal */}
+      <div
+        className="border border-gray-200 rounded-lg overflow-hidden transition-all duration-300 bg-white hover:shadow-sm"
+        style={{ display: 'flex', flexDirection: 'column' }}
+      >
+        {/* Cabecera con degradado según operador */}
+        <div 
+          className={`${headerGradients[activeVariant] || headerGradients.blue} px-5 py-4 ${textColors[activeVariant] || 'text-white'} relative`} 
+          style={{ minHeight: '88px' }}
+        >
+          <div className="flex flex-col pr-20">
+            <div className="font-bold text-xl leading-tight">{planName}</div>
+            {subtitle && <div className="text-sm opacity-90 mt-1">{subtitle}</div>}
+          </div>
+          {isPopular && (
+            <div
+              className="bg-white text-black px-3 py-1 rounded-full text-xs absolute top-4 right-4 whitespace-nowrap"
+              style={{ fontWeight: 500 }}
+            >
+              Más popular
+            </div>
+          )}
+        </div>
+
+        {/* Cuerpo */}
+        <div className="p-5 space-y-4 flex-1 flex flex-col">
+          {/* Selector de operador (dentro de la tarjeta) */}
+          {hasOperatorChoice && (
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">Operador</label>
+              <div className="flex gap-2 justify-between">
+                <button
+                  onClick={() => setSelectedOperator('movistar')}
+                  className={`flex-1 py-3 px-2 rounded text-white font-medium border-2 border-blue-600 ${
+                    selectedOperator === 'movistar' ? 'bg-blue-600' : 'bg-blue-600/80'
+                  } hover:bg-blue-600 transition-all`}
+                >
+                  Movistar
+                </button>
+                <button
+                  onClick={() => setSelectedOperator('orange')}
+                  className={`flex-1 py-3 px-2 rounded text-white font-medium border-2 border-orange-600 ${
+                    selectedOperator === 'orange' ? 'bg-orange-600' : 'bg-orange-600/80'
+                  } hover:bg-orange-600 transition-all`}
+                >
+                  Orange
+                </button>
+                <button
+                  onClick={() => setSelectedOperator('vodafone')}
+                  className={`flex-1 py-3 px-2 rounded text-white font-medium border-2 border-red-600 ${
+                    selectedOperator === 'vodafone' ? 'bg-red-600' : 'bg-red-600/80'
+                  } hover:bg-red-600 transition-all`}
+                >
+                  Vodafone
+                </button>
+              </div>
+            </div>
+          )}
+          
+          {/* Precio */}
+          <div className="mt-4 mb-5" style={{ height: '85px' }}>
+            {displayOriginalPrice && (
+              <div className="text-left ml-2">
+                <span className="text-xs text-gray-400 line-through">
+                  antes {displayOriginalPrice}€
+                </span>
+              </div>
+            )}
+            <div className="text-left mt-1 ml-2">
+              <div className="flex items-end">
+                <div className="inline-flex">
+                  <span className="text-6xl font-black text-gray-900 leading-none tracking-tight">{Math.floor(displayPrice)}</span>
+                  <div className="inline-flex flex-col justify-start relative" style={{marginLeft: '2px', bottom: '12px'}}>
+                    <span className="text-2xl font-bold text-gray-900 leading-none">,{((displayPrice % 1) * 100).toFixed(0).padStart(2, '0')}</span>
+                    <span className="text-sm text-gray-600 font-normal">€/mes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Selector de velocidad */}
+          {hasSpeedSelector && speeds.length > 0 && (
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-gray-800">Velocidad</label>
+              <div className="flex flex-wrap gap-2">
+                {speeds.map((speed) => {
+                  // Determinar el color de etiqueta basado en operador o estado VIP
+                  let labelColorClass = speedLabelColors.default;
+                  if (selectedOperator && speedLabelColors[selectedOperator]) {
+                    labelColorClass = speedLabelColors[selectedOperator];
+                  } else if (isVIP) {
+                    labelColorClass = speedLabelColors.vip;
+                  }
+                  
+                  const isSelected = selectedSpeed?.id === speed.id;
+                  
+                  return (
+                    <button
+                      key={speed.id}
+                      onClick={() => setSelectedSpeed(speed)}
+                      className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+                        isSelected 
+                          ? 'bg-green-500 text-white' 
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      }`}
+                    >
+                      {speed.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Características */}
+          <ul className="space-y-3 flex-1 mt-2" style={{ minHeight: '180px' }}>
+            {features.map((feature, i) => (
+              <li key={i} className="flex items-start gap-2.5 text-sm text-gray-700">
+                <div className="w-2 h-2 mt-1.5 rounded-full bg-green-500 flex-shrink-0"></div>
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+
+          {/* Extras */}
+          {extras.length > 0 && (
+            <div className="pt-4 mt-2 border-t border-gray-100" style={{ height: '40px' }}>
+              <button
+                onClick={() => setIsExtrasOpen(!isExtrasOpen)}
+                className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900 w-full text-left"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  {isExtrasOpen ? (
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                  ) : (
+                    <>
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </>
+                  )}
+                </svg>
+                <span className="flex-1">Añade extras</span>
+                <span className="text-gray-500">({extras.length})</span>
+              </button>
+              {isExtrasOpen && (
+                <div className="mt-3 space-y-2 pl-6">
+                  {extras.map((extra) => (
+                    <div key={extra.id} className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        id={`extra-${extra.id}`}
+                        checked={selectedExtras.has(extra.id)}
+                        onChange={(e) => {
+                          const newSelectedExtras = new Set(selectedExtras);
+                          if (e.target.checked) {
+                            newSelectedExtras.add(extra.id);
+                          } else {
+                            newSelectedExtras.delete(extra.id);
+                          }
+                          setSelectedExtras(newSelectedExtras);
+                        }}
+                        className="w-4 h-4 rounded border-gray-300 flex-shrink-0"
+                      />
+                      <label htmlFor={`extra-${extra.id}`} className="flex-1 text-sm">
+                        {extra.label}
+                      </label>
+                      <div className="flex items-baseline text-gray-900">
+                        <span className="text-sm mr-1">+</span>
+                        <PriceDisplay 
+                          price={extra.price} 
+                          size="sm" 
+                          showCurrency={true} 
+                          className="text-gray-900" 
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* CTA */}
+        <div className="px-5 pb-5 pt-3" style={{ height: '65px' }}>
+          <Button
+            onClick={() => {
+              const details = features?.length > 0 ? `Velocidad/Plan: ${features[0]}` : '';
+              (window as any).showContactModal?.(planName, displayPrice, ctaLink, details);
+            }}
+            className="w-full bg-black text-white hover:bg-gray-800 font-semibold py-3 rounded-sm text-center"
+          >
+            {hasOperatorChoice ? 'Elegir Operador' : ctaText || 'Contratar ahora'}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}

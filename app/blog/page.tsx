@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search, Calendar, User, ArrowRight } from "lucide-react"
-import Footer from "@/components/footer"
 
 export default function BlogPage() {
   const featuredPost = {
@@ -15,7 +14,7 @@ export default function BlogPage() {
       "Descubre las principales diferencias entre fibra óptica y ADSL, y por qué la fibra es la mejor opción para disfrutar de internet de alta velocidad.",
     image: "/placeholder-tx4vf.png",
     category: "Tecnología",
-    date: "15 Enero 2025",
+    date: "28 Agosto 2025",
     author: "Equipo Prisma",
     readTime: "5 min",
   }
@@ -28,7 +27,7 @@ export default function BlogPage() {
         "Consejos prácticos para mejorar la señal WiFi y obtener la máxima velocidad en todos los rincones de tu hogar.",
       image: "/wifi-router-home-setup.png",
       category: "Consejos",
-      date: "12 Enero 2025",
+      date: "15 Julio 2025",
       author: "María González",
       readTime: "4 min",
     },
@@ -39,7 +38,7 @@ export default function BlogPage() {
         "Todo lo que necesitas saber sobre la tecnología 5G y cómo está transformando la forma en que nos conectamos.",
       image: "/5g-network.png",
       category: "Tecnología",
-      date: "10 Enero 2025",
+      date: "22 Junio 2025",
       author: "Carlos Ruiz",
       readTime: "6 min",
     },
@@ -50,7 +49,7 @@ export default function BlogPage() {
         "Descubre cómo las alarmas inteligentes pueden proteger tu hogar y mantenerte conectado desde cualquier lugar.",
       image: "/smart-home-security.png",
       category: "Seguridad",
-      date: "8 Enero 2025",
+      date: "10 Mayo 2025",
       author: "Ana Martín",
       readTime: "5 min",
     },
@@ -61,7 +60,7 @@ export default function BlogPage() {
         "Aprende a configurar tu conexión para disfrutar de tus series y películas favoritas sin cortes ni buffering.",
       image: "/streaming-tv-setup.png",
       category: "Entretenimiento",
-      date: "5 Enero 2025",
+      date: "3 Abril 2025",
       author: "David López",
       readTime: "7 min",
     },
@@ -71,7 +70,7 @@ export default function BlogPage() {
       excerpt: "Consejos para optimizar tu conexión y herramientas para trabajar desde casa de manera productiva.",
       image: "/home-office-remote-work.png",
       category: "Trabajo",
-      date: "3 Enero 2025",
+      date: "18 Marzo 2025",
       author: "Laura Sánchez",
       readTime: "6 min",
     },
@@ -82,7 +81,7 @@ export default function BlogPage() {
         "Guía paso a paso para cambiar tu número de teléfono a Prisma manteniendo todos tus contactos y servicios.",
       image: "/mobile-portability.png",
       category: "Móvil",
-      date: "1 Enero 2025",
+      date: "5 Febrero 2025",
       author: "Roberto García",
       readTime: "4 min",
     },
@@ -92,80 +91,32 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-green-600 text-white py-2 text-sm">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <span>Soy particular</span>
-            <span>|</span>
-            <span>Soy empresa/autónomo</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <span>Preguntas frecuentes</span>
-            <span>Trabaja con nosotros</span>
-            <span>📞 Llámanos al 1540</span>
-            <span>🇪🇸 ES - EN</span>
-          </div>
-        </div>
-      </header>
-
-      {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-8">
-              <Link href="/" className="flex items-center">
-                <Image src="/logo-prisma.svg" alt="Prisma" width={120} height={40} className="h-8 w-auto" />
-              </Link>
-              <div className="hidden md:flex items-center space-x-6">
-                <Link href="/fibra-movil" className="text-gray-700 hover:text-green-600">
-                  Fibra y Móvil
-                </Link>
-                <Link href="/fibra" className="text-gray-700 hover:text-green-600">
-                  Fibra
-                </Link>
-                <Link href="/movil" className="text-gray-700 hover:text-green-600">
-                  Móvil
-                </Link>
-                <Link href="/olin-tv" className="text-gray-700 hover:text-green-600">
-                  Prisma TV
-                </Link>
-                <Link href="/alarmas" className="text-gray-700 hover:text-green-600">
-                  Alarmas
-                </Link>
-                <Link href="/blog" className="text-green-600 font-medium">
-                  Blog
-                </Link>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link href="/tienda" className="text-gray-700 hover:text-green-600">
-                Prisma Stores
-              </Link>
-              <Link href="/area-cliente" className="text-gray-700 hover:text-green-600">
-                Área de Cliente
-              </Link>
-              <Button className="bg-yellow-400 text-black hover:bg-yellow-500">📍 Ofertas para ti</Button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-green-50 to-cyan-50 py-16">
-        <div className="container mx-auto px-4">
+      <section className="relative overflow-hidden bg-gradient-to-br from-green-50 via-emerald-25 to-teal-50 py-20">
+        <div className="absolute inset-0 bg-gradient-to-r from-green-100/30 to-emerald-100/20"></div>
+        <div className="absolute top-0 left-0 w-full h-full">
+          <div className="absolute top-10 left-10 w-72 h-72 bg-green-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-200/15 rounded-full blur-3xl"></div>
+        </div>
+        <div className="relative container mx-auto px-4">
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Blog de Prisma</h1>
-            <p className="text-xl text-gray-600 mb-8">
-              Descubre las últimas noticias, consejos y tendencias en tecnología, conectividad y hogar inteligente
+            <div className="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium mb-6">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              Actualizado regularmente
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+              Blog de <span className="text-green-600">Prisma</span>
+            </h1>
+            <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+              Descubre las últimas noticias, consejos expertos y tendencias en tecnología, conectividad y hogar inteligente
             </p>
-            <div className="max-w-md mx-auto relative">
+            <div className="max-w-lg mx-auto relative">
               <Input
                 type="text"
-                placeholder="Buscar artículos..."
-                className="pl-10 pr-4 py-3 rounded-full border-2 border-green-200 focus:border-green-500"
+                placeholder="Buscar artículos, guías, consejos..."
+                className="pl-12 pr-6 py-4 text-lg rounded-2xl border-2 border-green-200 focus:border-green-500 bg-white/80 backdrop-blur-sm shadow-lg"
               />
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-green-500 h-6 w-6" />
             </div>
           </div>
         </div>
@@ -273,22 +224,6 @@ export default function BlogPage() {
           </div>
         </div>
       </section>
-
-      {/* Newsletter Subscription */}
-      <section className="py-16 bg-green-600 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">¿No te quieres perder nada?</h2>
-          <p className="text-xl mb-8 opacity-90">
-            Suscríbete a nuestro newsletter y recibe las últimas noticias y consejos directamente en tu email
-          </p>
-          <div className="max-w-md mx-auto flex gap-4">
-            <Input type="email" placeholder="Tu email" className="flex-1 bg-white text-gray-900" />
-            <Button className="bg-yellow-400 text-black hover:bg-yellow-500 px-8">Suscribirse</Button>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
     </div>
   )
 }

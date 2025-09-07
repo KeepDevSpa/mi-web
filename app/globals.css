@@ -1,7 +1,9 @@
 @import 'tailwindcss';
-@import 'tw-animate-css';
-
+/* @import 'tw-animate-css'; removed to prevent build errors */
 @custom-variant dark (&:is(.dark *));
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: oklch(1 0 0);
@@ -99,6 +101,10 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-white: #ffffff;
+  --color-blue: #0066cc;
+  --color-green: #009532;
+  --color-main: #2d3748;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -114,10 +120,176 @@
 }
 
 @layer base {
+  :root {
+    --font-poppins: 'Poppins', sans-serif;
+    @font-face {
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 300;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLDz8V1s.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    
+    @font-face {
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrFJA.ttf) format('truetype');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    
+    @font-face {
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLGTiV1s.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    
+    @font-face {
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLEj6V1s.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    
+    @font-face {
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLCz7V1s.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+  }
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--border);
+    outline-color: color-mix(in oklch, var(--ring) 50%, transparent);
+    font-family: var(--font-poppins), system-ui, sans-serif;
   }
   body {
     @apply bg-background text-foreground;
+    @apply font-sans;
+    font-family: var(--font-poppins), system-ui, sans-serif;
   }
+}
+/* Aseguramos que todos los componentes usen Poppins */
+* {
+  font-family: var(--font-poppins), system-ui, sans-serif;
+}
+
+/* Estilos adicionales para mejorar la tipografía */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold;
+}
+
+p {
+  @apply leading-relaxed;
+}
+
+/* Aseguramos que los inputs también usen Poppins */
+input, textarea, select, button {
+  font-family: var(--font-poppins), system-ui, sans-serif;
+}
+
+/* Variables CSS para PricingCard original */
+/* Custom CSS Variables */
+:root {
+  --pricing-card-bg: #f8f9fa;
+  --pricing-card-border: #e0e0e0;
+  --pricing-card-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Utilidades personalizadas */
+.price-container {
+  @apply flex items-end leading-none;
+  font-family: var(--font-poppins), system-ui, sans-serif;
+}
+.price-main {
+  @apply text-[4.5rem] font-bold;
+}
+.price-decimals-block {
+  @apply flex flex-col ml-1 -translate-y-[0.8rem] items-start;
+}
+.price-decimals {
+  @apply text-[1.5rem] font-bold;
+}
+.price-eur {
+  @apply text-[1.125rem] font-normal mt-[0.1rem];
+}
+
+/* Original price (smaller) */
+.price-container-small {
+  @apply flex items-end leading-none;
+  font-family: var(--font-poppins), system-ui, sans-serif;
+}
+.price-main-small {
+  @apply text-2xl font-bold;
+}
+.price-decimals-block-small {
+  @apply flex flex-col ml-1 -translate-y-[0.2rem];
+}
+.price-decimals-small {
+  @apply text-lg font-bold;
+}
+.price-eur-small {
+  @apply text-xs font-normal mt-[0.05rem];
+}
+
+/* Marquee Animation for Partners */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 35s linear infinite;
+}
+
+/* Animaciones para las secciones empresariales */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-element {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+
+.fade-in-element.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.service-card {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.service-card.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Efectos de hover suaves */
+.smooth-hover {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }

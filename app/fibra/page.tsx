@@ -1,493 +1,308 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Phone, MapPin, Check } from "lucide-react"
-import Footer from "@/components/footer"
+"use client";
 
+import { useState, useEffect } from "react";
+import  PricingCard  from "@/components/ui/pricing-card";
+import { InformationCard } from '@/components/ui/information-card';
+import { FAQAccordionSafe } from '@/components/ui/faq-accordion-safe';
+import ConversionTrigger from '@/components/ui/conversion-trigger';
+import { PriceDisplay } from '@/components/ui/price-display';
+import Image from 'next/image';
+
+/**
+ * Página de fibra con estructura homogénea y tarjetas personalizables desde admin
+ * ESTRUCTURA: Hero → ConversionTrigger → PriceCards → InformationCards → FAQ
+ */
 export default function FibraPage() {
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Top Bar */}
-      <div className="bg-gray-900 text-white text-sm py-2 px-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex gap-4">
-            <span className="text-lime-400">Soy particular</span>
-            <span>|</span>
-            <span className="text-lime-400">Soy empresa / autónomo</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span>Preguntas frecuentes</span>
-            <span>Trabaja con nosotros</span>
-            <Button variant="outline" size="sm" className="bg-lime-400 text-black border-lime-400 hover:bg-lime-500">
-              <Phone className="w-4 h-4 mr-1" />
-              Llámanos al 1560
-            </Button>
-            <div className="flex gap-1">
-              <span>ES</span>
-              <span className="text-gray-400">- EN</span>
-            </div>
-          </div>
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [fibraCards, setFibraCards] = useState<any[]>([]);
+  const [informationCards, setInformationCards] = useState<any[]>([]);
+  const [faqs, setFaqs] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        
+        // Cargar tarjetas de fibra
+        const cardsResponse = await fetch('/api/admin/cards?page=fibra');
+        if (cardsResponse.ok) {
+          const cardsData = await cardsResponse.json();
+          setFibraCards(cardsData);
+        }
+
+        // Cargar información cards
+        const infoResponse = await fetch('/api/admin/information-cards?page=fibra');
+        if (infoResponse.ok) {
+          const infoData = await infoResponse.json();
+          setInformationCards(infoData.filter((card: any) => card.isActive));
+        }
+
+        // Cargar FAQs
+        const faqResponse = await fetch('/api/admin/faq-items?page=fibra');
+        if (faqResponse.ok) {
+          const faqData = await faqResponse.json();
+          setFaqs(faqData.filter((faq: any) => faq.isActive));
+        }
+
+        setLoading(false);
+      } catch (err) {
+        console.error('Error loading data:', err);
+        setError('Error de conexión');
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Contenido hardcoded según la imagen proporcionada - Fibra
+  const hardcodedFibraCards = [
+    {
+      id: 'fibra-plus',
+      name: 'Fibra Plus',
+      subtitle: 'Buen servicio de fibra para tu hogar',
+      variant: 'medium',
+      features: [
+        'Fibra óptica simétrica',
+        'Router WiFi 6 incluido',
+        'Instalación gratuita',
+        'Soporte técnico 24/7',
+        'Sin permanencia'
+      ],
+      speeds: [
+        { id: '300mb', label: '300Mb', price: 29.95 },
+        { id: '600mb', label: '600Mb', price: 31.95 },
+        { id: '1000mb', label: '1000Mb', price: 33.95 }
+      ],
+      extras: [
+        {
+          id: 'linea-movil',
+          label: 'Añade una línea móvil desde 5€',
+          price: 5,
+          description: 'Línea móvil adicional'
+        },
+        {
+          id: 'tv-basico',
+          label: 'Añade TV básico',
+          price: 8,
+          description: 'Paquete básico de televisión'
+        }
+      ],
+      ctaText: '¡Lo quiero!',
+      showHeaderSelectors: false,
+      hasSpeedSelector: true
+    },
+    {
+      id: 'fibra-vip',
+      name: 'Fibra VIP',
+      subtitle: 'Servicio Semiprofesional',
+      variant: 'golden',
+      features: [
+        'Fibra óptica simétrica premium',
+        'Router WiFi 6 Pro incluido',
+        'Instalación gratuita prioritaria',
+        'Soporte técnico premium 24/7',
+        'Sin permanencia',
+        'IP estática incluida'
+      ],
+      speeds: [
+        { id: '300mb-vip', label: '300Mb', price: 49.95 },
+        { id: '600mb-vip', label: '600Mb', price: 56.95 },
+        { id: '1000mb-vip', label: '1000Mb', price: 64.95 }
+      ],
+      extras: [
+        {
+          id: 'linea-movil-premium',
+          label: 'Añade línea móvil premium',
+          price: 15,
+          description: 'Línea móvil con datos ilimitados'
+        },
+        {
+          id: 'cloud-storage-pro',
+          label: 'Añade Cloud Storage Pro',
+          price: 12,
+          description: '1TB de almacenamiento en la nube'
+        },
+        {
+          id: 'tv-premium',
+          label: 'Añade TV Premium',
+          price: 20,
+          description: 'Todos los canales + deportes'
+        }
+      ],
+      ctaText: '¡Lo quiero!',
+      isPopular: true,
+      showHeaderSelectors: false,
+      hasSpeedSelector: true
+    }
+  ];
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center text-red-600">
+          <p>Error al cargar la página: {error}</p>
         </div>
       </div>
+    );
+  }
 
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="text-3xl font-bold text-black">Prisma</div>
-
-            <nav className="hidden md:flex items-center space-x-8">
-              <a href="/fibra-movil" className="text-gray-700 hover:text-gray-900">
-                Fibra y Móvil
-              </a>
-              <a href="/fibra" className="text-lime-600 font-semibold">
-                Fibra
-              </a>
-              <a href="/movil" className="text-gray-700 hover:text-gray-900">
-                Móvil
-              </a>
-              <a href="#" className="text-gray-700 hover:text-gray-900">
-                PrismaTV
-              </a>
-              <a href="#" className="text-gray-700 hover:text-gray-900">
-                Alarmas
-              </a>
-            </nav>
-
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-600">Prisma Stores</span>
-              <Button variant="outline" size="sm">
-                Área de Cliente
-              </Button>
-              <Button size="sm" className="bg-lime-400 text-black hover:bg-lime-500">
-                <MapPin className="w-4 h-4 mr-1" />
-                Ofertas para tu zona
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <section className="relative h-[400px] bg-gradient-to-r from-blue-400 to-blue-600 overflow-hidden">
+  return (
+    <div className="bg-white">
+      {/* 1. HERO SECTION */}
+      <section className="relative h-[500px] bg-gradient-to-r from-black/50 to-black/30">
         <div className="absolute inset-0">
-          <img src="/happy-jet-ski-riders.png" alt="People on jet ski" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/40"></div>
+          <Image
+            src="/conexion-internet.jpg"
+            alt="Hombre joven disfrutando de la conexión de fibra óptica"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30"></div>
         </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
-          <div className="text-white max-w-2xl">
-            <h1 className="text-4xl font-bold leading-tight mb-4">
-              Contrata tu
-              <br />
-              Fibra con Prisma
-            </h1>
-            <p className="text-lg mb-6">
-              Contrata tu fibra de internet con Prisma. Encuentra la tarifa que más se adapta a ti. La mejor conexión al
-              mejor precio en casa!
-            </p>
-          </div>
-
-          <div className="absolute top-8 right-8">
-            <div className="bg-white rounded-2xl p-6 shadow-lg">
-              <div className="text-xs text-gray-600 mb-1">Fibra Evolution</div>
-              <div className="text-lg font-bold text-black mb-2">
-                Fibra óptica <strong>600Mb</strong>
-                <br />
-                Router <strong>WiFi 6</strong>
-              </div>
-              <div className="flex items-baseline gap-2 mb-2">
-                <span className="text-sm text-gray-500 line-through">25€</span>
-                <span className="text-3xl font-bold text-black">15€</span>
-                <span className="text-sm text-gray-600">/mes</span>
-              </div>
-              <Badge className="bg-lime-400 text-black">-40%</Badge>
-              <Button className="w-full mt-4 bg-gray-800 text-white hover:bg-gray-900">¡Lo quiero!</Button>
+        <div className="relative z-10 flex items-center h-full">
+          <div className="container mx-auto px-4">
+            <div className="max-w-2xl">
+              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+                ¿Qué tarifa de <br />
+                <span className="text-[#ffc600]">Fibra</span> <br />
+                es para ti?
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90 mb-8">
+                Nuestra conexión de alta velocidad <br />
+                con la tarifa de fibra que mejor se adapte a tus necesidades.
+              </p>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Fibra Plans Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4">
+      {/* 3. PRICE CARDS PERSONALIZADAS CON ESTRUCTURA ADMIN */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-black mb-4">Encuentra tu tarifa de Fibra</h2>
-            <p className="text-gray-600 max-w-3xl mx-auto">
-              Contratar internet es fácil con Prisma. Conoce las tarifas de fibra, encuentra la que más se adapte a ti.
-              Navega con límites: 600 Mb, 1Gb o 10 Gb. Contrata internet con servicio y disfruta un 40% hasta enero del
-              2026. ¡Conéctate con Prisma!
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Encuentra tu tarifa de Fibra
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Las tarifas de Fibra de Prisma te ofrecen la mejor conexión a internet para tu hogar o empresa.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Fibra Evolution */}
-            <Card className="overflow-hidden shadow-lg">
-              <div className="bg-gray-600 text-white p-4 text-center">
-                <Badge className="bg-lime-400 text-black mb-4">La más popular</Badge>
-                <h3 className="text-xl font-bold">Fibra Evolution</h3>
-              </div>
-              <CardContent className="p-0">
-                <div className="bg-gradient-to-b from-lime-200 to-lime-300 p-6">
-                  <div className="space-y-3 mb-6">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                      <span className="text-sm">
-                        Fibra óptica simétrica <strong>600Mb</strong>
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                      <span className="text-sm">
-                        Router <strong>WiFi 6</strong>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white p-6 text-center">
-                  <div className="flex items-baseline justify-center gap-2 mb-2">
-                    <span className="text-sm text-gray-500 line-through">25€</span>
-                    <span className="text-4xl font-bold text-black">15€</span>
-                    <span className="text-sm text-gray-600">/mes</span>
-                  </div>
-                  <Button className="w-full bg-gray-800 text-white hover:bg-gray-900">¡Lo quiero!</Button>
-                  <div className="mt-4 space-y-2">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-600" />
-                      <span>Añade una línea de móvil desde 5€</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-600" />
-                      <span>Añade una línea fija por 0€</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-600" />
-                      <span>Añade PrismaTV por 5€</span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Fibra Pro */}
-            <Card className="overflow-hidden shadow-lg">
-              <div className="bg-gray-600 text-white p-4 text-center">
-                <h3 className="text-xl font-bold">Fibra Pro</h3>
-              </div>
-              <CardContent className="p-0">
-                <div className="bg-gradient-to-b from-gray-200 to-gray-300 p-6">
-                  <div className="space-y-3 mb-6">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-                      <span className="text-sm">
-                        Fibra óptica simétrica <strong>1Gb</strong>
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-                      <span className="text-sm">
-                        Router <strong>WiFi 6</strong>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white p-6 text-center">
-                  <div className="flex items-baseline justify-center gap-2 mb-2">
-                    <span className="text-sm text-gray-500 line-through">30€</span>
-                    <span className="text-4xl font-bold text-black">18€</span>
-                    <span className="text-sm text-gray-600">/mes</span>
-                  </div>
-                  <Button className="w-full bg-gray-800 text-white hover:bg-gray-900">¡Lo quiero!</Button>
-                  <div className="mt-4 space-y-2">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-600" />
-                      <span>Añade una línea de móvil desde 5€</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-600" />
-                      <span>Añade una línea fija por 0€</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-600" />
-                      <span>Añade PrismaTV por 5€</span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Fibra Master */}
-            <Card className="overflow-hidden shadow-lg">
-              <div className="bg-gray-600 text-white p-4 text-center">
-                <h3 className="text-xl font-bold">Fibra Master</h3>
-              </div>
-              <CardContent className="p-0">
-                <div className="bg-gradient-to-b from-yellow-200 to-yellow-300 p-6">
-                  <div className="space-y-3 mb-6">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-yellow-600 rounded-full"></div>
-                      <span className="text-sm">
-                        Fibra óptica <strong>10Gb</strong>
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-yellow-600 rounded-full"></div>
-                      <span className="text-sm">
-                        Router <strong>WiFi 6</strong>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white p-6 text-center">
-                  <div className="flex items-baseline justify-center gap-2 mb-2">
-                    <span className="text-4xl font-bold text-black">40€</span>
-                    <span className="text-sm text-gray-600">/mes</span>
-                  </div>
-                  <Button className="w-full bg-gray-800 text-white hover:bg-gray-900">¡Lo quiero!</Button>
-                  <div className="mt-4 space-y-2">
-                    <div className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-600" />
-                      <span>Añade una línea de móvil desde 5€</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-600" />
-                      <span>Añade una línea fija por 0€</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-600" />
-                      <span>Añade PrismaTV</span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Cards usando el componente PricingCard personalizable desde admin */}
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
+              {hardcodedFibraCards.map((card) => {
+                // Asegurarse de que cada tarjeta tenga una variante definida
+                const cardWithVariant = {
+                  ...card,
+                  variant: card.variant || 'blue' // Usar 'blue' como fallback
+                };
+                
+                return (
+                  <PricingCard
+                    key={card.id}
+                    variant={cardWithVariant.variant as any}
+                    planName={card.name}
+                    subtitle={card.subtitle}
+                    isPopular={card.isPopular}
+                    isVIP={card.variant === 'golden' || card.name.toLowerCase().includes('vip')}
+                    isPremium={card.variant === 'premium' || card.name.toLowerCase().includes('premium')}
+                    hasSpeedSelector={card.hasSpeedSelector}
+                    speeds={card.speeds}
+                    features={card.features}
+                    extras={card.extras}
+                    ctaText={card.ctaText}
+                    price={card.speeds && card.speeds.length > 0 ? card.speeds[0].price : 0}
+                  />
+                );
+              })}
+            </div>
           </div>
+
+          {/* Información oficial de la API (tarjetas dinámicas desde admin) */}
+          {fibraCards.length > 0 && (
+            <div className="flex justify-center mt-12">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {fibraCards.map((card) => {
+                  // Asegurarse de que cada tarjeta tenga una variante definida
+                  const cardWithVariant = {
+                    ...card,
+                    variant: card.variant || 'blue' // Usar 'blue' como fallback
+                  };
+                  
+                  return (
+                    <PricingCard
+                      key={card.id}
+                      variant={cardWithVariant.variant as any}
+                      planName={card.name}
+                      isPopular={card.isPopular}
+                      isVIP={card.isVIP}
+                      isPremium={card.isPremium}
+                      hasSpeedSelector={card.hasSpeedSelector}
+                      speeds={card.speeds?.map((s: any) => ({ ...s, price: Number(s.price), originalPrice: Number(s.originalPrice) })) || []}
+                      features={card.features || []}
+                      extras={card.extras || []}
+                      ctaText={card.ctaText || '¡Quiero fibra!'}
+                      hasCoverageSelector={card.hasCoverageSelector}
+                      coverages={card.coverages || []}
+                      hasDataSelector={card.hasDataSelector}
+                      dataOptions={card.dataOptions || []}
+                      price={card.currentPrice || (card.speeds && card.speeds.length > 0 ? Number(card.speeds[0].price) : 0)}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Bottom CTA Section */}
-      <section className="bg-lime-400 py-8">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-end justify-between gap-8">
-            <div className="flex gap-8">
-              <div>
-                <label className="block text-sm font-medium text-black mb-2">Código Postal</label>
-                <Input placeholder="" className="bg-white border-gray-300 w-48" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-black mb-2">Teléfono de contacto</label>
-                <div className="text-xs text-black mb-1">Al enviar, aceptas la política de privacidad de Prisma.</div>
-              </div>
+      {/* 4. INFORMATION CARDS */}
+      {informationCards.length > 0 && (
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                ¿Por qué elegir nuestra Fibra Óptica?
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Tecnología punta, instalación profesional y el mejor servicio técnico del sector.
+              </p>
             </div>
-            <Button className="bg-green-700 text-white hover:bg-green-800 px-8 py-3 rounded-full">
-              Comprobar cobertura
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Ofertas en Fibra ¡y más!</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="overflow-hidden rounded-2xl shadow-lg">
-              <div className="relative">
-                <img src="/happy-jet-ski-riders.png" alt="Fibra y Móvil offer" className="w-full h-48 object-cover" />
-                <div className="absolute bottom-4 left-4 bg-white rounded-lg p-4">
-                  <div className="text-xs text-gray-600 mb-1">TODO EVOLUTION 20</div>
-                  <div className="text-lg font-bold">
-                    FIBRA <span className="text-gray-600">600Mb</span>
-                    <br />
-                    MÓVIL <span className="text-gray-600">20GB</span>
-                  </div>
-                  <div className="flex items-baseline gap-2 mt-2">
-                    <span className="text-2xl font-bold text-green-600">18€</span>
-                    <Badge className="bg-green-500 text-white text-xs">-40%</Badge>
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    PRECIO ORIGINAL <span className="line-through">30€</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="overflow-hidden rounded-2xl shadow-lg bg-orange-500 text-white">
-              <div className="p-8 text-center">
-                <h3 className="text-2xl font-bold mb-4">TU HOGAR SEGURO CON LA TECNOLOGÍA MÁS AVANZADA.</h3>
-                <div className="bg-white rounded-lg p-4 mb-6">
-                  <img src="/placeholder-ll9em.png" alt="Security devices" className="mx-auto" />
-                </div>
-                <div className="text-lg font-bold mb-2">Prisma PROTECT</div>
-                <div className="text-sm">O segurma</div>
-              </div>
-            </Card>
-
-            <Card className="overflow-hidden rounded-2xl shadow-lg">
-              <div className="relative">
-                <img src="/happy-jet-ski-riders.png" alt="Todo Pro offer" className="w-full h-48 object-cover" />
-                <div className="absolute bottom-4 right-4 bg-white rounded-lg p-4">
-                  <div className="text-xs text-gray-600 mb-1">TODO PRO 60</div>
-                  <div className="text-lg font-bold">
-                    FIBRA <span className="text-gray-600">1Gb</span>
-                    <br />
-                    MÓVIL <span className="text-gray-600">60GB</span>
-                  </div>
-                  <div className="flex items-baseline gap-2 mt-2">
-                    <span className="text-2xl font-bold text-green-600">24€</span>
-                    <Badge className="bg-green-500 text-white text-xs">-40%</Badge>
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    PRECIO ORIGINAL <span className="line-through">40€</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Descubre nuestros servicios incluidos en Fibra</h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="p-6 text-center rounded-2xl shadow-lg bg-gradient-to-br from-teal-500 to-teal-600 text-white">
-              <div className="w-12 h-12 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
-                <span className="text-2xl">⏸️</span>
-              </div>
-              <h3 className="text-xl font-bold mb-3">Servicio Pausa</h3>
-              <p className="text-sm opacity-90">
-                El Servicio Pausa de Prisma te permite suspender de manera temporal tu servicio de fibra cuando no lo
-                necesites, y no pagar por él hasta que lo reactives. Y lo mejor de todo es que es totalmente gratuito
-                hasta un máximo de 180 días al año.
-              </p>
-            </Card>
-
-            <Card className="p-6 text-center rounded-2xl shadow-lg bg-gradient-to-br from-green-600 to-green-700 text-white">
-              <div className="w-12 h-12 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
-                <span className="text-2xl">📞</span>
-              </div>
-              <h3 className="text-xl font-bold mb-3">Tarifas Fijo</h3>
-              <p className="text-sm opacity-90">
-                Disfruta de tarifas competitivas para llamadas desde tu línea fija, con opciones que se adaptan a tus
-                necesidades de comunicación. Mantente conectado con tus seres queridos sin preocuparte por los costes
-                adicionales.
-              </p>
-            </Card>
-
-            <Card className="p-6 text-center rounded-2xl shadow-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-              <div className="w-12 h-12 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
-                <span className="text-2xl">📶</span>
-              </div>
-              <h3 className="text-xl font-bold mb-3">WiFi Cobertura+</h3>
-              <p className="text-sm opacity-90">
-                Mejora la forma en la que conectas tu hogar a internet con mayor cobertura en cada rincón, estabilidad
-                de la red y mayor duración con tu velocidad contratada.
-              </p>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center gap-12">
-            <div className="flex-1">
-              <div className="bg-green-400 rounded-full w-64 h-64 flex items-center justify-center relative">
-                <img src="/happy-customer-service-rep.png" alt="Customer service" className="rounded-full" />
-              </div>
-            </div>
-            <div className="flex-1">
-              <h2 className="text-3xl font-bold mb-6">¿Por qué elegir Prisma y sus tarifas de Fibra?</h2>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
-                  <div>
-                    <strong>Internet con máxima velocidad,</strong> para todas tus necesidades.
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
-                  <div>
-                    <strong>Red propia de fibra,</strong> garantizando estabilidad.
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
-                  <div>
-                    <strong>Instalación rápida y sencilla,</strong> sin complicaciones.
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
-                  <div>
-                    <strong>Flexibilidad</strong> para adaptarte a las tarifas que mejor te convengan.
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
-                  <div>
-                    <strong>Servicio técnico eficaz</strong> que resuelve cualquier incidencia rápidamente.
-                  </div>
-                </div>
-              </div>
-              <Button className="mt-6 bg-green-600 text-white hover:bg-green-700 px-8 py-3 rounded-full">
-                Contrata la mejor fibra con Prisma
-              </Button>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {informationCards.map((card) => (
+                <InformationCard
+                  key={card.id}
+                  title={card.title}
+                  description={card.description}
+                  icon={card.icon}
+                />
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-4">Tu fibra más rápida en menos de 1 semana</h2>
-          <p className="text-center text-gray-600 mb-12">Es la media de nuestras últimas 1.071 instalaciones</p>
-
-          <div className="flex justify-center items-center gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                <span className="text-2xl">📅</span>
-              </div>
-              <div className="font-bold text-lg mb-2">1</div>
-              <p className="text-sm text-gray-600 max-w-32">
-                Una vez confirmado nuestro técnico especializado, te contactamos para acordar la fecha y hora de
-                instalación.
+      {/* 5. FAQ SECTION */}
+      {faqs.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Preguntas Frecuentes sobre Fibra
+              </h2>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Resolvemos todas tus dudas sobre velocidad, instalación y funcionamiento.
               </p>
             </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                <span className="text-2xl">📅</span>
-              </div>
-              <div className="font-bold text-lg mb-2">2-3</div>
-              <p className="text-sm text-gray-600 max-w-32">
-                En 48 horas confirmamos un técnico especializado en tu zona. Te contacta la mejor fecha y hora.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                <span className="text-2xl">📅</span>
-              </div>
-              <div className="font-bold text-lg mb-2">4-5</div>
-              <p className="text-sm text-gray-600 max-w-32">
-                Nuestro técnico acude a tu domicilio. La instalación es completamente gratuita y dura entre 1 y 2 horas.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-500 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                <Check className="w-8 h-8 text-white" />
-              </div>
-              <div className="font-bold text-lg mb-2">¡Ya puedes disfrutar de tu fibra Prisma!</div>
+            <div className="max-w-4xl mx-auto">
+              <FAQAccordionSafe items={faqs} />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <Footer />
+        </section>
+      )}
     </div>
-  )
+  );
 }
